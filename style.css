@@ -1,0 +1,94 @@
+html, body {
+  min-height: 100%;
+  position: relative;
+}
+
+button {
+  cursor: pointer;
+}
+
+button, input {
+  font-size: inherit;
+}
+
+button:focus, input:focus {
+  outline: 0;
+}
+
+body {
+  background-color: #111;
+  font-size: 14px;
+  margin: 0;
+}
+
+.wrapper {
+  box-sizing: border-box;
+  max-width: 460px;
+  color: #fff;
+  padding-top: 300px;
+  padding-bottom: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  overflow-y: auto;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1)
+}
+
+.clock-text {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 40px;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.add-task {
+  display: flex;
+  margin-bottom: 30px;
+}
+
+.add-task-input {
+  flex-grow: 1;
+  height: 50px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border-width: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+.add-task-button {
+  background-color: #0080ff;
+  line-height: 50px;
+  color: #fff;
+  padding: 0 30px;
+  border: 0;
+  border-radius: 0 3px 3px 0;
+}
+
+.taskList-item {
+  display: flex;
+  padding: 20px 15px;
+  border: 1px solid #222;
+  border-radius: 3px;
+  margin-top: 15px;
+}
+
+.taskList-itemContent {
+  flex-grow: 1;
+  padding-right: 30px;
+}
+
+.taskList-itemTitle {
+  margin-bottom: 15px;
+}
+
+.taskList-itemLog {
+  font-size: 13px;
+  color: #666;
+  margin-top: 10px;
+}
+
+.start-timer {
+  width: 50px;
+  height: 50px;
+  border: 0;
+  border-radius: 30px;
+}

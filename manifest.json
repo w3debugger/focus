@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+  "name": "Focus",
+  "description": "Web App to focus on tasks",
+  "version": "1.0",
+  "author": "Umar",
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "browser_action": {
+    "default_icon": "icon.png"
+  },
+  "permissions": [
+    "tabs"
+  ]
+}
