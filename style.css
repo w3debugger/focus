@@ -17,16 +17,15 @@ button:focus, input:focus {
 
 body {
   background-color: #111;
-  font-size: 14px;
+  font-size: 16px;
   margin: 0;
 }
 
 .wrapper {
   box-sizing: border-box;
-  max-width: 460px;
+  max-width: 500px;
   color: #fff;
-  padding-top: 300px;
-  padding-bottom: 300px;
+  padding: 100px 30px 0;
   margin-left: auto;
   margin-right: auto;
   overflow-y: auto;
@@ -47,6 +46,7 @@ body {
 
 .add-task-input {
   flex-grow: 1;
+  width: 100%;
   height: 50px;
   padding-left: 15px;
   padding-right: 15px;
@@ -63,7 +63,12 @@ body {
   border-radius: 0 3px 3px 0;
 }
 
-.taskList-item {
+.task-list {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.task-list-item {
   display: flex;
   padding: 20px 15px;
   border: 1px solid #222;
@@ -71,17 +76,17 @@ body {
   margin-top: 15px;
 }
 
-.taskList-itemContent {
+.task-list-itemContent {
   flex-grow: 1;
   padding-right: 30px;
 }
 
-.taskList-itemTitle {
+.task-list-itemTitle {
   margin-bottom: 15px;
 }
 
-.taskList-itemLog {
-  font-size: 13px;
+.task-list-itemLog {
+  font-family: 'Courier New', Courier, monospace;
   color: #666;
   margin-top: 10px;
 }
@@ -89,6 +94,37 @@ body {
 .start-timer {
   width: 50px;
   height: 50px;
+  background-color: transparent;
+  font-size: 0;
+  border: 2px solid #222;
+  border-radius: 25px;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.start-timer:before,
+.start-timer:after {
+  content: '';
+  margin-top: -10px;
+  position: absolute;
+  top: 50%;
+}
+
+.start-timer:before {
+  border-top: 10px solid transparent;
+  border-left: 14px solid #fff;
+  border-bottom: 10px solid transparent;
+  left: 17px;
+}
+
+.start-timer:after {
+  right: 17px;
+}
+
+.pause:before,
+.pause:after {
+  width: 3px;
+  height: 20px;
+  background-color: #fff;
   border: 0;
-  border-radius: 30px;
 }
