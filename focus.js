@@ -8,8 +8,8 @@ class LocalStorage {
     return JSON.parse(localStorage.getItem(key)) || defaultValue;
   }
 
-  deleteItem(key) {
-    return localStorage.deleteItem(key);
+  removeItem(key) {
+    return localStorage.removeItem(key);
   }
 }
 
@@ -22,6 +22,7 @@ const ADD_TASK = '.add-task';
 const TASK_LIST = '.task-list';
 const TASK_TIME = '.task-time';
 const CLOCK_TEXT = '.clock-text';
+const REMOVE_LOGS = '.remove-logs';
 const STOP_BUTTON = '.stop-button';
 const START_BUTTON = '.start-timer';
 const INPUT_FIELD = '.add-task-input';
@@ -46,6 +47,37 @@ const taskHTML = ( id, text, started, timeHTML = [] ) => {
 }
 
 class Focus {
+  removeLogs() {
+    if (confirm('Are you sure you want to delete?')) {
+      this.storage.removeItem(TASK_LIST_KEY);
+      this.storage.removeItem(TASK_TIMES_KEY);
+      this.displayTaskList();
+    }
+    return;
+  }
+
+  calcTimeDiff(start, end) {
+    // get total seconds between the times
+    let totalSeconds = Math.abs(end - start) / 1000;
+
+    // calculate (and subtract) whole days
+    const days = Math.floor(totalSeconds / 86400);
+    totalSeconds -= days * 86400;
+
+    // calculate (and subtract) whole hours
+    const hours = Math.floor(totalSeconds / 3600) % 24;
+    totalSeconds -= hours * 3600;
+
+    // calculate (and subtract) whole minutes
+    const minutes = Math.floor(totalSeconds / 60) % 60;
+    totalSeconds -= minutes * 60;
+
+    // calculate remaining secons
+    const seconds = Math.floor(totalSeconds % 60);
+
+    return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+  }
+
   getTasks() {
     return this.storage.getItem(TASK_LIST_KEY, []);
   }
@@ -64,7 +96,10 @@ class Focus {
     const timeList = this.getTimes();
     const dataItem = document.querySelector(`[data-task="${taskId}"]`);
     const timeHTML = (timeList[taskId] || []).map(({ start, end }) => `
-      <div class="task-list-itemLog">${this.showClock(start)} - ${this.showClock(end)}</div>`).join('');
+        <div class="task-list-itemLog">
+          ${this.showClock(start)} ${end ? `- ${this.showClock(end)}` : ''} ${end ? `--- ${this.calcTimeDiff(start, end)}` : ''}
+        </div>
+      `).join('');
 
     dataItem.innerHTML = timeHTML;
   }
@@ -110,7 +145,10 @@ class Focus {
 
     taskListText.innerHTML = taskList.map(({ id, text, started }) => {
       const timeHTML = (timeList[id] || []).map(({ start, end }) => `
-        <div class="task-list-itemLog">${this.showClock(start)} - ${this.showClock(end)}</div>`).join('');
+        <div class="task-list-itemLog">
+          ${this.showClock(start)} ${end ? `- ${this.showClock(end)}` : ''} ${end ? `--- ${this.calcTimeDiff(start, end)}` : ''}
+        </div>
+      `).join('');
 
       return taskHTML(id, text, started, timeHTML);
     }).join('');
@@ -163,12 +201,18 @@ class Focus {
     this.displayTaskList();
 
     // Add log
-    document.addEventListener('click', e => {
+    document.addEventListener('click', (e) => {
       if (e.target.dataset && e.target.dataset.itemId) {
         const taskId = parseInt(e.target.dataset.itemId);
         this.startTimer(taskId);
         this.updateTimeHTML(taskId);
       }
+    });
+
+    // Delete log
+    document.querySelector(REMOVE_LOGS).addEventListener('click', (e) => {
+      e.preventDefault();
+      this.removeLogs();
     });
   }
 
