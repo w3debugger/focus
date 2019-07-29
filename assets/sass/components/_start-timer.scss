@@ -1,0 +1,38 @@
+.start-timer {
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+  font-size: 0;
+  border: 2px solid var(--color-grey);
+  border-radius: 25px;
+  margin-bottom: 15px;
+  position: relative;
+  box-sizing: border-box;
+
+  &:before, &:after {
+    content: '';
+    transform: translateY(-50%);
+    position: absolute;
+    top: 50%;
+    transition: .3s;
+  }
+
+
+  &:before {
+    border-top: 10px solid transparent;
+    border-left: 14px solid var(--fg-color);
+    border-bottom: 10px solid transparent;
+    left: 17px;
+  }
+
+  &:after {
+    right: 17px;
+  }
+
+  &.pause:before, &.pause:after {
+    width: 3px;
+    height: 20px;
+    background-color: var(--fg-color);
+    border: 0;
+  }
+}

@@ -1,0 +1,54 @@
+.task-list {
+  display: flex;
+  flex-direction: column-reverse;
+
+  &-item {
+    display: flex;
+    background-color: var(--color-task-item-bg);
+    padding: 30px;
+    border-radius: 6px;
+    margin-top: 25px;
+    border: 2px solid var(--color-grey);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .1);
+  }
+
+  &-itemContent {
+    flex-grow: 1;
+    padding-right: 30px;
+  }
+
+  &-itemTitle {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+
+  &-itemOverallTime {
+    font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+
+  &-itemLogs {
+    display: flex;
+    flex-direction: column-reverse;
+    margin-bottom: 0;
+  }
+
+  &-itemLog {
+    font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
+    font-size: 20px;
+    margin-top: 10px;
+  }
+
+  &-itemAction {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.long, .diff {
+  display: none;
+}

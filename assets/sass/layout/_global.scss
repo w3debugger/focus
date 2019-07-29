@@ -1,0 +1,53 @@
+body {
+  background-color: var(--bg-color);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 16px;
+  color: var(--fg-color);
+  margin: 0;
+  transition: all 0.3s;
+}
+
+.wrapper {
+  box-sizing: border-box;
+  max-width: 600px;
+  padding: 100px 30px;
+  margin-left: auto;
+  margin-right: auto;
+  overflow-y: auto;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 30px;
+}
+
+.remove-logs {
+  display: block;
+  text-decoration: none;
+
+  svg {
+    pointer-events: none;
+    fill: var(--color-grey);
+  }
+}
+
+button {
+  cursor: pointer;
+}
+
+button, input {
+  font-size: inherit;
+
+  &:focus { outline: 0; }
+}
+
+.clock-text {
+  font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
+  font-size: 50px;
+  font-weight: 300;
+  text-align: center;
+  margin-bottom: 50px;
+  // // text-shadow: 5px 5px 0 var(--color-grey);
+}

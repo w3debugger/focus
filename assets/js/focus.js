@@ -14,6 +14,7 @@ class LocalStorage {
 }
 
 // Storage keys
+const CONFIG_KEY = 'configs';
 const TASK_LIST_KEY = 'task:list';
 const TASK_TIMES_KEY = 'task:times';
 
@@ -26,34 +27,54 @@ const REMOVE_LOGS = '.remove-logs';
 const STOP_BUTTON = '.stop-button';
 const START_BUTTON = '.start-timer';
 const INPUT_FIELD = '.add-task-input';
+const MODE_CHECKBOX = '.mode-checkbox';
 
 // Selectors
 const clockText = document.querySelector(CLOCK_TEXT);
 const taskListText = document.querySelector(TASK_LIST);
+const addTaskButton = document.querySelector(ADD_TASK);
+const modeCheckbox = document.querySelector(MODE_CHECKBOX);
 const inputFieldText = document.querySelector(INPUT_FIELD);
+const removeLogsButton = document.querySelector(REMOVE_LOGS);
 
-const taskHTML = ( id, text, started, timeHTML = [] ) => {
+const taskHTML = (id, text, started, timeHTML = [], overallTime) => {
   return `<div class="task-list-item">
     <div class="task-list-itemContent">
       <div class="task-list-itemTitle">${text}</div>
+      <div class="task-list-itemOverallTime">${overallTime}</div>
 
-      <div class="task-list-itemLogs" data-task="${id}">${timeHTML}</div>
+      <ol class="task-list-itemLogs" data-task="${id}">${timeHTML}</ol>
     </div>
 
     <div class="task-list-itemAction">
       <button class="${START_BUTTON.replace('.', '')} ${started ? 'pause' : ''}" data-item-id="${id}">Start</button>
+
+      <a class="remove-logs" href="#" data-log-id="${id}">
+        <svg width="30" height="40" viewBox="0 0 432.6 486.4">
+          <path d="M110.1,486.4a72.3,72.3,0,0,1-72.2-72.2V97H13.5a13.5,13.5,0,0,1,0-27H114.7V53.5A53.561,53.561,0,0,1,168.2,0h96.2a53.56,53.56,0,0,1,53.5,53.5V70H419.1a13.5,13.5,0,0,1,0,27H394.7V414.2a72.3,72.3,0,0,1-72.2,72.2ZM64.9,414.2a45.281,45.281,0,0,0,45.2,45.2H322.5a45.281,45.281,0,0,0,45.2-45.2h.1V97H64.9ZM141.7,53.5V70H290.9V53.5A26.545,26.545,0,0,0,264.4,27H168.2A26.546,26.546,0,0,0,141.7,53.5Zm61.1,343.9V158.9a13.5,13.5,0,0,1,27,0V397.5a13.5,13.5,0,1,1-27-.1Zm88.1-14.8V173.7a13.5,13.5,0,0,1,27,0V382.6a13.5,13.5,0,1,1-27,0Zm-176.2,0V173.7a13.5,13.5,0,0,1,27,0V382.6a13.5,13.5,0,0,1-27,0Z" />
+        </svg>
+      </a>
     </div>
   </div>`;
-}
+};
 
 class Focus {
-  removeLogs() {
-    if (confirm('Are you sure you want to delete?')) {
-      this.storage.removeItem(TASK_LIST_KEY);
-      this.storage.removeItem(TASK_TIMES_KEY);
-      this.displayTaskList();
+  getConfig() {
+    return this.storage.getItem(CONFIG_KEY, {});
+  }
+
+  getTasks() {
+    return this.storage.getItem(TASK_LIST_KEY, []);
+  }
+
+  getTimes(taskId = null) {
+    const allTimes = this.storage.getItem(TASK_TIMES_KEY, {});
+
+    if (!taskId) {
+      return allTimes;
     }
-    return;
+
+    return allTimes[taskId] || [];
   }
 
   calcTimeDiff(start, end) {
@@ -78,28 +99,36 @@ class Focus {
     return `${days}d ${hours}h ${minutes}m ${seconds}s`;
   }
 
-  getTasks() {
-    return this.storage.getItem(TASK_LIST_KEY, []);
-  }
+  sumTimes(taskId) {
+    const timeList = this.getTimes();
 
-  getTimes(taskId = null) {
-    const allTimes = this.storage.getItem(TASK_TIMES_KEY, {});
-
-    if (!taskId) {
-      return allTimes;
+    if (!timeList[taskId] && !timeList[taskId]) {
+      return;
     }
 
-    return allTimes[taskId] || [];
+    const starts = timeList[taskId].map(time => time.start);
+    const ends = timeList[taskId].filter(time => time.end).map(time => time.end);
+
+    if (starts.length !== ends.length) {
+      ends[starts.length - 1] = starts[starts.length - 1];
+    }
+
+    const sumStarts = starts.reduce((a, b) => a + b, 0);
+    const sumEnds = ends.reduce((a, b) => a + b, 0);
+
+    return this.calcTimeDiff(sumStarts, sumEnds);
   }
 
   updateTimeHTML(taskId) {
     const timeList = this.getTimes();
     const dataItem = document.querySelector(`[data-task="${taskId}"]`);
     const timeHTML = (timeList[taskId] || []).map(({ start, end }) => `
-        <div class="task-list-itemLog">
-          ${this.showClock(start)} ${end ? `- ${this.showClock(end)}` : ''} ${end ? `--- ${this.calcTimeDiff(start, end)}` : ''}
-        </div>
-      `).join('');
+      <li class="task-list-itemLog">
+        <div class="long">${new Date(start).toUTCString()} <br /> ${new Date(end).toUTCString()}</div>
+        <div class="short">${this.showClock(start)} - ${this.showClock(end)}</div>
+        <div class="diff">${this.calcTimeDiff(start, end)}</div>
+      </li>
+    `).join('');
 
     dataItem.innerHTML = timeHTML;
   }
@@ -144,13 +173,18 @@ class Focus {
     const timeList = this.getTimes();
 
     taskListText.innerHTML = taskList.map(({ id, text, started }) => {
-      const timeHTML = (timeList[id] || []).map(({ start, end }) => `
-        <div class="task-list-itemLog">
-          ${this.showClock(start)} ${end ? `- ${this.showClock(end)}` : ''} ${end ? `--- ${this.calcTimeDiff(start, end)}` : ''}
-        </div>
-      `).join('');
+      const timeHTML = (timeList[id] || []).map(({ start, end }) => {
+        return `
+        <li class="task-list-itemLog">
+        <div class="long">${new Date(start).toUTCString()} <br /> ${new Date(end).toUTCString()}</div>
+        <div class="short">${this.showClock(start)} - ${this.showClock(end)}</div>
+        <div class="diff">${this.calcTimeDiff(start, end)}</div>
+        </li>`;
+      }).join('');
 
-      return taskHTML(id, text, started, timeHTML);
+      const overallTime = this.sumTimes(id);
+
+      return taskHTML(id, text, started, timeHTML, overallTime);
     }).join('');
   }
 
@@ -183,9 +217,33 @@ class Focus {
     this.storage.setItem(TASK_TIMES_KEY, allTimes);
   }
 
+  // remove
+  removeLog() {
+    if (confirm('Are you sure you want to delete all logs?')) {
+      this.storage.removeItem(TASK_LIST_KEY);
+      this.storage.removeItem(TASK_TIMES_KEY);
+      this.displayTaskList();
+    }
+    return;
+  }
+
   bindUI() {
+    // Configurations
+    const config = this.getConfig();
+
+    // Set theme
+    if (config.theme === 'dark') {
+      modeCheckbox.checked = true;
+    }
+    document.body.classList = config.theme;
+
+
+    // Binding for displaying current time
+    setInterval(this.showClock, 1000);
+    this.displayTaskList();
+
     // Event bindings for the UI
-    document.querySelector(ADD_TASK).addEventListener('submit', (e) => {
+    addTaskButton.addEventListener('submit', (e) => {
       e.preventDefault();
 
       const taskText = inputFieldText.value;
@@ -196,24 +254,57 @@ class Focus {
       inputFieldText.value = '';
     });
 
-    // Binding for displaying current time
-    setInterval(this.showClock, 1000);
-    this.displayTaskList();
-
     // Add log
     document.addEventListener('click', (e) => {
+
       if (e.target.dataset && e.target.dataset.itemId) {
+        e.preventDefault();
         const taskId = parseInt(e.target.dataset.itemId);
         this.startTimer(taskId);
         this.updateTimeHTML(taskId);
       }
+
+      if (e.target.dataset && e.target.dataset.logId) {
+        e.preventDefault();
+
+        if (confirm('Are you sure you want to delete this log?')) {
+          const taskId = parseInt(e.target.dataset.logId);
+
+          const taskList = this.getTasks();
+          const allTimes = this.getTimes();
+
+          const enrichTaskList = taskList.filter(({ id }) => id !== taskId);
+
+          delete allTimes[taskId];
+
+          this.storage.setItem(TASK_LIST_KEY, enrichTaskList);
+          this.storage.setItem(TASK_TIMES_KEY, allTimes);
+
+          this.displayTaskList();
+        }
+      }
     });
 
     // Delete log
-    document.querySelector(REMOVE_LOGS).addEventListener('click', (e) => {
+    removeLogsButton.addEventListener('click', (e) => {
       e.preventDefault();
-      this.removeLogs();
+      this.removeLog();
     });
+
+    // Change theme
+    modeCheckbox.addEventListener('change', (e) => {
+      const config = this.getConfig();
+
+      if (config.theme === 'dark') {
+        document.body.classList = 'light';
+        config.theme = 'light';
+      } else {
+        document.body.classList = 'dark';
+        config.theme = 'dark';
+      }
+
+      this.storage.setItem(CONFIG_KEY, config);
+    })
   }
 
   init({ storage }) {
