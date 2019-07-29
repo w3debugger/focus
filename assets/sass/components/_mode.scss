@@ -16,7 +16,7 @@
     display: none;
 
     &:checked + .mode:before { transform: translateX(46px); }
-    &:checked + .mode:after  { transform: translateX(36px); }
+    &:checked + .mode:after  { transform: translate(39px, -6px); }
   }
 
   &:before, &:after {
