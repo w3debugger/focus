@@ -10,10 +10,6 @@
     margin-top: 25px;
     position: relative;
     box-shadow: 0 5px 15px rgba(0, 0, 0, .05);
-
-    &:not(.showMore) .remove-logs {
-      display: none;
-    }
   }
 
   &-itemContent {
@@ -35,7 +31,7 @@
   }
 
   &-itemLogs {
-    display: none;
+    display: flex;
     flex-direction: column-reverse;
     margin-bottom: 0;
 
@@ -48,16 +44,19 @@
     font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
     font-size: 20px;
     margin-top: 10px;
+
+    &:last-child {
+      color: var(--color-blue);
+    }
   }
 
   &-itemAction {
     display: flex;
-    flex-direction: column;
     align-items: center;
   }
 
   &-showMore {
-    display: block;
+    display: none;
     width: 100%;
     font-size: 0;
     text-align: center;
@@ -68,6 +67,11 @@
 
     &:hover {
       background-color: var(--bg-color);
+    }
+
+    .showMore & .dots {
+      margin-left: 10px;
+      margin-right: 10px;
     }
   }
 }
@@ -84,4 +88,5 @@
   height: 6px;
   border-radius: 3px;
   margin: 6px 3px;
+  transition: all 0.3s ease-in-out;
 }

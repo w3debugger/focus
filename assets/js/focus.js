@@ -40,7 +40,7 @@ const removeLogsButton = document.querySelector(REMOVE_LOGS);
 
 const taskHTML = (id, text, started, timeHTML = [], overallTime) => {
   return `
-    <div class="task-list-item">
+    <div class="task-list-item" data-list-id="${id}">
       <div class="task-list-itemContent">
         <div class="task-list-itemTitle">${text}</div>
         <div class="task-list-itemOverallTime">${overallTime || 'Time has not started yet'}</div>
@@ -49,16 +49,16 @@ const taskHTML = (id, text, started, timeHTML = [], overallTime) => {
       </div>
 
       <div class="task-list-itemAction">
-        <button class="${START_BUTTON.replace('.', '')} ${started ? 'pause' : ''}" data-item-id="${id}">Start</button>
-
         <a class="remove-logs" href="#" data-log-id="${id}">
           <svg width="30" height="40" viewBox="0 0 432.6 486.4">
             <path d="M110.1,486.4a72.3,72.3,0,0,1-72.2-72.2V97H13.5a13.5,13.5,0,0,1,0-27H114.7V53.5A53.561,53.561,0,0,1,168.2,0h96.2a53.56,53.56,0,0,1,53.5,53.5V70H419.1a13.5,13.5,0,0,1,0,27H394.7V414.2a72.3,72.3,0,0,1-72.2,72.2ZM64.9,414.2a45.281,45.281,0,0,0,45.2,45.2H322.5a45.281,45.281,0,0,0,45.2-45.2h.1V97H64.9ZM141.7,53.5V70H290.9V53.5A26.545,26.545,0,0,0,264.4,27H168.2A26.546,26.546,0,0,0,141.7,53.5Zm61.1,343.9V158.9a13.5,13.5,0,0,1,27,0V397.5a13.5,13.5,0,1,1-27-.1Zm88.1-14.8V173.7a13.5,13.5,0,0,1,27,0V382.6a13.5,13.5,0,1,1-27,0Zm-176.2,0V173.7a13.5,13.5,0,0,1,27,0V382.6a13.5,13.5,0,0,1-27,0Z" />
           </svg>
         </a>
+
+        <button class="${START_BUTTON.replace('.', '')} ${started ? 'pause' : ''}" data-item-id="${id}">Start</button>
       </div>
 
-      <a class="task-list-showMore" href="#">
+      <a class="task-list-showMore" href="#" data-toggle-id="${id}">
         <i class="dots"></i>
         <i class="dots"></i>
         <i class="dots"></i>
@@ -199,27 +199,25 @@ class Focus {
   startTimer(taskId) {
     const taskList = this.getTasks();
     const allTimes = this.getTimes();
-    let enrichTaskList = [];
 
     allTimes[taskId] = allTimes[taskId] || [];
+
     const timesWithoutEnd = allTimes[taskId].filter(time => !time.end).length !== 0;
 
     if (timesWithoutEnd) {
       const selectTime = allTimes[taskId].length - 1;
       allTimes[taskId][selectTime].end = new Date().getTime();
-      document.querySelector(`[data-item-id="${taskId}"]`).classList.remove('pause');
-      enrichTaskList = taskList.map(task => {
-        task.started = false;
-        return task;
-      });
     } else {
-      document.querySelector(`[data-item-id="${taskId}"]`).classList.add('pause');
       allTimes[taskId].push({ start: new Date().getTime(), started: true, });
-      enrichTaskList = taskList.map(task => {
-        task.started = true;
-        return task;
-      });
     }
+
+    const enrichTaskList = taskList.map(task => {
+      if (taskId === task.id) {
+        task.started = !timesWithoutEnd
+      }
+
+      return task;
+    });
 
     this.storage.setItem(TASK_LIST_KEY, enrichTaskList);
     this.storage.setItem(TASK_TIMES_KEY, allTimes);
@@ -245,9 +243,11 @@ class Focus {
     }
     document.body.classList = config.theme;
 
-
     // Binding for displaying current time
-    setInterval(this.showClock, 1000);
+    setInterval(() => {
+      this.displayTaskList();
+      this.showClock();
+    }, 1000);
     this.displayTaskList();
 
     // Event bindings for the UI
@@ -260,37 +260,6 @@ class Focus {
       this.displayTask();
 
       inputFieldText.value = '';
-    });
-
-    // Add log
-    document.addEventListener('click', (e) => {
-
-      if (e.target.dataset && e.target.dataset.itemId) {
-        e.preventDefault();
-        const taskId = parseInt(e.target.dataset.itemId);
-        this.startTimer(taskId);
-        this.updateTimeHTML(taskId);
-      }
-
-      if (e.target.dataset && e.target.dataset.logId) {
-        e.preventDefault();
-
-        if (confirm('Are you sure you want to delete this log?')) {
-          const taskId = parseInt(e.target.dataset.logId);
-
-          const taskList = this.getTasks();
-          const allTimes = this.getTimes();
-
-          const enrichTaskList = taskList.filter(({ id }) => id !== taskId);
-
-          delete allTimes[taskId];
-
-          this.storage.setItem(TASK_LIST_KEY, enrichTaskList);
-          this.storage.setItem(TASK_TIMES_KEY, allTimes);
-
-          this.displayTaskList();
-        }
-      }
     });
 
     // Delete log
@@ -313,6 +282,48 @@ class Focus {
 
       this.storage.setItem(CONFIG_KEY, config);
     })
+
+    document.addEventListener('click', (e) => {
+      // start / add log
+      if (e.target.dataset && e.target.dataset.itemId) {
+        e.preventDefault();
+
+        const taskId = parseInt(e.target.dataset.itemId);
+        this.startTimer(taskId);
+        this.updateTimeHTML(taskId);
+      }
+
+      // Delete single log
+      if (e.target.dataset && e.target.dataset.logId) {
+        e.preventDefault();
+
+        if (confirm('Are you sure you want to delete this log?')) {
+          const logId = parseInt(e.target.dataset.logId);
+
+          const taskList = this.getTasks();
+          const allTimes = this.getTimes();
+
+          const enrichTaskList = taskList.filter(({ id }) => id !== logId);
+
+          delete allTimes[logId];
+
+          this.storage.setItem(TASK_LIST_KEY, enrichTaskList);
+          this.storage.setItem(TASK_TIMES_KEY, allTimes);
+
+          this.displayTaskList();
+        }
+      }
+
+      // show / hide log
+      if (e.target.dataset && e.target.dataset.toggleId) {
+        e.preventDefault();
+
+        const toggleId = parseInt(e.target.dataset.toggleId);
+        const listId = document.querySelector(`[data-list-id="${toggleId}"]`);
+
+        listId.classList.toggle('showMore');
+      }
+    });
   }
 
   init({ storage }) {
