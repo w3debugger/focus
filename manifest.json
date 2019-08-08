@@ -1,8 +1,9 @@
 {
   "manifest_version": 2,
-  "name": "Focus",
+  "name": "Focus - To keep you focused on your tasks",
+  "short_name": "Focus",
   "description": "Web App to focus on tasks",
-  "version": "1.0",
+  "version": "1.0.1",
   "author": "Umar",
   "chrome_url_overrides": {
     "newtab": "index.html"
