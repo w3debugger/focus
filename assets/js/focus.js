@@ -50,7 +50,7 @@ const taskHTML = (id, text, started, timeHTML = [], overallTime) => {
 
       <div class="task-list-itemAction">
         <a class="remove-logs" href="#" data-log-id="${id}">
-          <svg width="30" height="40" viewBox="0 0 432.6 486.4">
+          <svg width="20" height="30" viewBox="0 0 432.6 486.4">
             <path d="M110.1,486.4a72.3,72.3,0,0,1-72.2-72.2V97H13.5a13.5,13.5,0,0,1,0-27H114.7V53.5A53.561,53.561,0,0,1,168.2,0h96.2a53.56,53.56,0,0,1,53.5,53.5V70H419.1a13.5,13.5,0,0,1,0,27H394.7V414.2a72.3,72.3,0,0,1-72.2,72.2ZM64.9,414.2a45.281,45.281,0,0,0,45.2,45.2H322.5a45.281,45.281,0,0,0,45.2-45.2h.1V97H64.9ZM141.7,53.5V70H290.9V53.5A26.545,26.545,0,0,0,264.4,27H168.2A26.546,26.546,0,0,0,141.7,53.5Zm61.1,343.9V158.9a13.5,13.5,0,0,1,27,0V397.5a13.5,13.5,0,1,1-27-.1Zm88.1-14.8V173.7a13.5,13.5,0,0,1,27,0V382.6a13.5,13.5,0,1,1-27,0Zm-176.2,0V173.7a13.5,13.5,0,0,1,27,0V382.6a13.5,13.5,0,0,1-27,0Z" />
           </svg>
         </a>
@@ -132,7 +132,7 @@ class Focus {
     const dataItem = document.querySelector(`[data-task="${taskId}"]`);
     const timeHTML = (timeList[taskId] || []).map(({ start, end = new Date().getTime() }) => `
       <li class="task-list-itemLog">
-        <div class="long">${new Date(start).toUTCString()} <br /> ${new Date(end).toUTCString()}</div>
+        <div class="long">${new Date(start).toDateString()}</div>
         <div class="short">${this.showClock(start)} - ${this.showClock(end)}</div>
         <div class="diff">${this.calcTimeDiff(start, end)}</div>
       </li>
@@ -184,7 +184,7 @@ class Focus {
       const timeHTML = (timeList[id] || []).map(({ start, end = new Date().getTime() }) => {
         return `
           <li class="task-list-itemLog">
-            <div class="long">${new Date(start).toUTCString()} <br /> ${new Date(end).toUTCString()}</div>
+            <div class="long">${new Date(start).toDateString()}</div>
             <div class="short">${this.showClock(start)} - ${this.showClock(end)}</div>
             <div class="diff">${this.calcTimeDiff(start, end)}</div>
           </li>`;

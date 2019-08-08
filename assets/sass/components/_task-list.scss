@@ -4,35 +4,53 @@
 
   &-item {
     display: flex;
+    flex-direction: column;
     background-color: var(--color-task-item-bg);
-    padding: 30px;
+    padding: 20px;
     border-radius: 6px;
     margin-top: 25px;
     position: relative;
     box-shadow: 0 5px 15px rgba(0, 0, 0, .05);
+
+    @media (min-width: 414px) {
+      flex-direction: row;
+      padding: 30px;
+    }
   }
 
   &-itemContent {
     flex-grow: 1;
-    padding-right: 30px;
+
+    @media (min-width: 414px) {
+      padding-right: 30px;
+    }
   }
 
   &-itemTitle {
     font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
+
+    @media (min-width: 414px) {
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
   }
 
   &-itemOverallTime {
     font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
     font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
+
+    @media (min-width: 414px) {
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
   }
 
   &-itemLogs {
     display: flex;
     flex-direction: column-reverse;
+    margin-top: 0;
     margin-bottom: 0;
 
     .showMore & {
@@ -42,17 +60,28 @@
 
   &-itemLog {
     font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
-    font-size: 20px;
+    font-size: 16px;
     margin-top: 10px;
 
     &:last-child {
       color: var(--color-blue);
+    }
+
+    @media (min-width: 414px) {
+      font-size: 20px;
     }
   }
 
   &-itemAction {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
+    margin-top: 20px;
+
+    @media (min-width: 414px) {
+      justify-content: center;
+      margin-top: 0;
+    }
   }
 
   &-showMore {
@@ -77,7 +106,7 @@
 }
 
 .long, .diff {
-  display: none;
+  font-size: 14px;
 }
 
 .dots {

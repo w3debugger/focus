@@ -1,11 +1,11 @@
 .start-timer {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   background-color: transparent;
   font-size: 0;
   border: 2px solid var(--color-grey);
   border-radius: 25px;
-  margin-left: 30px;
+  margin-left: 20px;
   position: relative;
   box-sizing: border-box;
 
@@ -22,16 +22,16 @@
     border-top: 10px solid transparent;
     border-left: 14px solid var(--fg-color);
     border-bottom: 10px solid transparent;
-    left: 17px;
+    left: 13px;
   }
 
   &:after {
-    right: 17px;
+    right: 13px;
   }
 
   &.pause:before, &.pause:after {
-    width: 3px;
-    height: 20px;
+    width: 2px;
+    height: 14px;
     background-color: var(--fg-color);
     border: 0;
   }
