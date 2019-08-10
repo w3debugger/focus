@@ -3,8 +3,11 @@
   "name": "Focus - To keep you focused on your tasks",
   "short_name": "Focus",
   "description": "Web App to focus on tasks",
-  "version": "1.0.1",
-  "author": "Umar",
+  "version": "1.0.2",
+  "author": "Umar & Waleed",
+  "icons": {
+    "128": "icon.png"
+  },
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
