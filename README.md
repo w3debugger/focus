@@ -9,9 +9,9 @@
 
 
 <p align="center">
-    <a href="https://chrome.google.com/webstore/detail/focus-to-keep-you-focused/mbndklaohlplphnlfafdlcnbdgklkojd" target="_blank">Chrome</a> |
-    <a href="https://addons.mozilla.org/en-US/firefox/addon/focus-focus-on-tasks-at-hand/?src=search" target="_blank">Firefox</a> |
-    <a href="https://w3debugger.github.io/focus/" target="_blank" >Web Version</a> 
+    <a href="https://chrome.google.com/webstore/detail/focus-to-keep-you-focused/mbndklaohlplphnlfafdlcnbdgklkojd">Chrome</a> |
+    <a href="https://addons.mozilla.org/en-US/firefox/addon/focus-focus-on-tasks-at-hand/?src=search">Firefox</a> |
+    <a href="https://w3debugger.github.io/focus/">Web Version</a> 
 </p>
 
 <br />
