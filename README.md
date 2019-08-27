@@ -7,7 +7,6 @@
   Simply focus on the tasks in your browser tab.
 </p>
 
-
 <p align="center">
     <a href="https://chrome.google.com/webstore/detail/focus-to-keep-you-focused/mbndklaohlplphnlfafdlcnbdgklkojd">Chrome</a> |
     <a href="https://addons.mozilla.org/en-US/firefox/addon/focus-focus-on-tasks-at-hand/?src=search">Firefox</a> |
@@ -17,7 +16,7 @@
 <br />
 
 <p align="center">
-    <img src="" width="800" />
+    <img src="https://i.imgur.com/AtUGfmU.png" width="800" />
 </p>
 
 <a id="installation"></a>
@@ -30,6 +29,9 @@ You can get the latest available Focus Extension version from the [Chrome Web St
 <a id="installation-firefox"></a>
 ### Firefox
 You can get the latest version of Focus Extension from the [Mozilla Add-ons website](https://addons.mozilla.org/en-US/firefox/addon/focus-focus-on-tasks-at-hand/?src=search).
+
+### Web Version
+Try and test out the web version [here](https://w3debugger.github.io/focus/).
 
 <a id="contribution"></a>
 # Contribution
