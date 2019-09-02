@@ -1,4 +1,3 @@
-&nbsp;
 <p align="center">
   <img src="https://raw.githubusercontent.com/w3debugger/focus/master/icon.png" alt="Focus - Focus on the tasks at hand" />
 </p>
@@ -59,3 +58,6 @@ Compile CSS:
 ```
   sass --watch assets/sass/style.scss assets/css/style.css --style compressed --no-source-map
 ```
+
+# Spacial Thanks
+- Firefox Extension [ByWaleed](https://github.com/ByWaleed)
