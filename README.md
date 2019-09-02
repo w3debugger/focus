@@ -8,3 +8,6 @@ https://chrome.google.com/webstore/detail/focus-to-keep-you-focused/mbndklaohlpl
 1. Install sass `npm i -g sass`
 2. Go inside folder `cd focus`
 3. Run `sass --watch assets/sass/style.scss assets/css/style.css --style compressed --no-source-map`
+
+# Spacial Thanks
+- Firefox Extension [ByWaleed](https://github.com/ByWaleed)

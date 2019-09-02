@@ -4,7 +4,7 @@
   "short_name": "Focus",
   "description": "Web App to focus on tasks",
   "version": "1.0.2",
-  "author": "Umar & Waleed",
+  "author": "Umar",
   "icons": {
     "128": "icon.png"
   },
