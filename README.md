@@ -59,5 +59,5 @@ Compile CSS:
   sass --watch assets/sass/style.scss assets/css/style.css --style compressed --no-source-map
 ```
 
-# Spacial Thanks
+# Special Thanks
 - Firefox Extension [ByWaleed](https://github.com/ByWaleed)
