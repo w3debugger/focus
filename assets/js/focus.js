@@ -186,7 +186,6 @@ class Focus {
           <li class="task-list-itemLog">
             <div class="long">${new Date(start).toDateString()}</div>
             <div class="short">${this.showClock(start)} - ${this.showClock(end)}</div>
-            <div class="diff">${this.calcTimeDiff(start, end)}</div>
           </li>`;
       }).join('');
 
@@ -329,7 +328,7 @@ class Focus {
   init({ storage }) {
     this.storage = storage;
     this.bindUI()
-    this.showClock();
+    // this.showClock();
   }
 }
 
