@@ -27,8 +27,9 @@
   }
 
   &-itemTitle {
-    font-size: 18px;
+    font-size: 24px;
     margin-bottom: 10px;
+    color: var(--color-blue);
 
     @media (min-width: 414px) {
       font-weight: bold;
@@ -38,7 +39,7 @@
 
   &-itemOverallTime {
     font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
-    font-size: 18px;
+    font-size: 20px;
     margin-bottom: 10px;
 
     @media (min-width: 414px) {
@@ -62,10 +63,6 @@
     font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
     font-size: 16px;
     margin-top: 10px;
-
-    &:last-child {
-      color: var(--color-blue);
-    }
 
     @media (min-width: 414px) {
       font-size: 20px;
